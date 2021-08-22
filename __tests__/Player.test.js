@@ -17,8 +17,8 @@ test('creates a player object', () => {
   );
 });
 
-test("gets player's stats as an object", () => {
-  const player = new Player('Dave');
+test('gets player stats as an object', () => {
+  const player = new Player('Vera');
 
   expect(player.getStats()).toHaveProperty('potions');
   expect(player.getStats()).toHaveProperty('health');
@@ -27,11 +27,67 @@ test("gets player's stats as an object", () => {
 });
 
 test('gets inventory from player or returns false', () => {
-  const player = new Player('Dave');
+  const player = new Player('Alex');
 
   expect(player.getInventory()).toEqual(expect.any(Array));
 
   player.inventory = [];
 
   expect(player.getInventory()).toEqual(false);
+});
+
+test('gets player health value', () => {
+  const player = new Player('Jess')
+
+  expect(player.getHealth()).toEqual(expect.stringContaining(player.health.toString()));
+});
+
+test('checks if player is alive or not', () => {
+  const player = new Player('Noah');
+
+  expect(player.isAlive()).toBeTruthy();
+
+  player.health = 0;
+
+  expect(player.isAlive()).toBeFalsy();
+});
+
+test('subtracts from player health', () => {
+  const player = new Player('Priya');
+  const oldHealth = player.health;
+
+  player.reduceHealth(5);
+
+  expect(player.health).toBe(oldHealth - 5);
+
+  player.reduceHealth(99999);
+
+  expect(player.health).toBe(0);
+});
+
+test('gets player attack value', () => {
+  const player = new Player('Yuna');
+  player.strength = 10;
+
+  expect(player.getAttackValue()).toBeGreaterThanOrEqual(5);
+  expect(player.getAttackValue()).toBeLessThanOrEqual(15);
+});
+
+test('adds a potion to the inventory', () => {
+  const player = new Player('Mark');
+  const oldCount = player.inventory.length;
+
+  player.addPotion(new Potion());
+
+  expect(player.inventory.length).toBeGreaterThan(oldCount);
+});
+
+test('uses a potion from inventory', () => {
+  const player = new Player('Leigh');
+  player.inventory = [new Potion(), new Potion(), new Potion()];
+  const oldCount = player.inventory.length;
+
+  player.usePotion(1);
+
+  expect(player.inventory.length).toBeLessThan(oldCount);
 });
